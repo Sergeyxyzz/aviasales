@@ -1,0 +1,30 @@
+.buttonsMenu {
+  width: 502px;
+  height: 50px;
+  grid-area: 1 / 2 / 2 / 3;
+  border-radius: 10px;
+  box-shadow: 2px 5px 8px 0px rgba(0, 0, 0, 0.23);
+
+  button {
+    width: 50%;
+    height: 100%;
+    border: none;
+  }
+}
+
+button:first-child {
+  border-right: 1px solid gray;
+}
+
+@media screen and (max-width: 790px) {
+  .buttonsMenu {
+    position: relative;
+    display: inline-block;
+    height: 50px;
+  }
+}
+
+.active {
+  background-color: #2196f3;
+  color: white;
+}

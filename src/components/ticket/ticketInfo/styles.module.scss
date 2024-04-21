@@ -1,0 +1,23 @@
+.bodyInfo {
+  height: 40px;
+  display: flex;
+  width: 90%;
+  justify-content: space-between;
+  padding-bottom: 20px;
+}
+
+.miniHeader {
+  color: #a0b0b9;
+}
+
+.miniText {
+  color: #4a4a4a;
+}
+
+.infoTable {
+  width: 33.33333%;
+}
+
+.infoTable:nth-child(2) {
+  padding-left: 30px;
+}

@@ -1,0 +1,22 @@
+.wrapApp {
+  background: rgb(243, 247, 250);
+  min-height: 100vh;
+  height: 100%;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', 'Arial', sans-serif;
+  font-size: 0.98rem;
+}
+
+button,
+label {
+  cursor: url('./icons/Cursor.svg'), pointer; /* Устанавливаем свой курсор изображением */
+}
+
+button {
+  font-weight: 600;
+  letter-spacing: 0.6px;
+}
