@@ -112,12 +112,13 @@ const appSlice = createSlice({
         if (state.checkedAll) {
           return true
         } else {
-          const stopsLength = ticket.segments[0].stops.length
+          const stopsThereLen = ticket.segments[0].stops.length
+          const stopsFromLen = ticket.segments[1].stops.length
           return (
-            (state.checkedWithout && stopsLength === 0) ||
-            (state.checkedOne && stopsLength === 1) ||
-            (state.checkedTwo && stopsLength === 2) ||
-            (state.checkedThree && stopsLength === 3)
+            (state.checkedWithout && (stopsThereLen === 0 || stopsFromLen === 0)) ||
+            (state.checkedOne && (stopsThereLen === 1 || stopsFromLen === 1)) ||
+            (state.checkedTwo && (stopsThereLen === 2 || stopsFromLen === 2)) ||
+            (state.checkedThree && (stopsThereLen === 3 || stopsFromLen === 3))
           )
         }
       })
