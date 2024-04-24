@@ -1,26 +1,37 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
-export const fetchSearchId = createAsyncThunk('app/fetchSearchId', async function () {
+export const fetchSearchId = createAsyncThunk('app/fetchSearchId', async (_, { dispatch }) => {
   const response = await fetch('https://aviasales-test-api.kata.academy/search')
   const data = await response.json()
-  return data
+  return dispatch(fetchTickets(data.searchId))
 })
 
-export const fetchTickets = createAsyncThunk('app/fetchTickets', async function (searchId) {
-  const response = await fetch(`https://aviasales-test-api.kata.academy/tickets?searchId=${searchId}`)
-  const data = await response.json()
-  return data
+const fetchTickets = createAsyncThunk('app/fetchTickets', async (searchId, { dispatch }) => {
+  while (true) {
+    try {
+      const response = await fetch(`https://aviasales-test-api.kata.academy/tickets?searchId=${searchId}`)
+      if (response.ok) {
+        const data = await response.json()
+        dispatch(addTickets(data.tickets))
+        dispatch(sortTicketsByPrice())
+        if (data.stop) {
+          break
+        }
+      }
+    } catch (error) {}
+  }
 })
 
 const appSlice = createSlice({
   name: 'app',
 
   initialState: {
-    tickets: [],
+    tickets: { tickets: [] },
     status: null,
     error: null,
     isLoading: false,
     searchId: null,
+    searchIdReady: false,
     ticketsReady: false,
     visibleTickets: 5,
     checkedAll: true,
@@ -32,6 +43,10 @@ const appSlice = createSlice({
   },
 
   reducers: {
+    addTickets(state, action) {
+      state.tickets.tickets.push(...action.payload)
+    },
+
     sortTicketsByPrice(state) {
       state.tickets = {
         ...state.tickets,
@@ -127,15 +142,15 @@ const appSlice = createSlice({
 
   extraReducers: (builder) => {
     builder
-      .addCase(fetchSearchId.pending, (state) => {
+      .addCase(fetchSearchId.pending, (state, action) => {
         state.status = 'loading'
         state.error = null
       })
       .addCase(fetchSearchId.fulfilled, (state, action) => {
         state.status = 'resolved'
-        state.searchId = action.payload
+        state.searchId = action.payload.searchId
       })
-      .addCase(fetchSearchId.rejected, (state) => {
+      .addCase(fetchSearchId.rejected, (state, action) => {
         state.status = 'rejected'
         state.error = 'Ошибка при загрузке идентификатора: перезагрузите страницу или проверьте подключение к интернету'
       })
@@ -144,10 +159,9 @@ const appSlice = createSlice({
         state.isLoading = true
         state.error = null
       })
-      .addCase(fetchTickets.fulfilled, (state, action) => {
+      .addCase(fetchTickets.fulfilled, (state) => {
         state.isLoading = false
         state.status = 'resolved'
-        state.tickets = action.payload
         state.ticketsReady = true
       })
       .addCase(fetchTickets.rejected, (state) => {
@@ -168,6 +182,7 @@ export const {
   switchCheckedTwo,
   switchCheckedThree,
   updateFilteredTickets,
+  addTickets,
 } = appSlice.actions
 
 export default appSlice.reducer

@@ -7,12 +7,11 @@ import BtnShowMoreTickets from '../BtnShowMoreTickets/BtnShowMoreTickets'
 import { v4 as uuidv4 } from 'uuid'
 import { useDispatch, useSelector } from 'react-redux'
 import { Spin, notification, Alert } from 'antd'
-import { fetchSearchId, fetchTickets, updateFilteredTickets, sortTicketsByPrice } from '../../store/appSlice'
+import { fetchSearchId, updateFilteredTickets } from '../../store/appSlice'
 
 const App = (props) => {
   const dispatch = useDispatch()
   const filteredTickets = useSelector((state) => state.app.filteredTickets)
-  const searchId = useSelector((state) => state.app.searchId)
   const state = useSelector((state) => state.app)
   const isLoading = useSelector((state) => state.app.isLoading)
   const error = useSelector((state) => state.app.error)
@@ -33,14 +32,7 @@ const App = (props) => {
 
   useEffect(() => {
     dispatch(fetchSearchId())
-  }, [dispatch])
-
-  useEffect(() => {
-    if (searchId && typeof searchId === 'object') {
-      const id = searchId.searchId
-      dispatch(fetchTickets(id))
-    }
-  }, [dispatch, searchId])
+  }, []) 
 
   useEffect(() => {
     if (error) {
@@ -51,25 +43,19 @@ const App = (props) => {
     }
   }, [error])
 
-  useEffect(() => {
-    if (ticketsReady) {
-      setTimeout(() => {
-        dispatch(sortTicketsByPrice())
-      }, 666)
-    }
-  }, [ticketsReady, dispatch])
-
   return (
     <>
-      <img src="./logo.png" alt="alt" className={styles.logo} />
+      {isLoading ? (
+        <Spin size="large" className={styles.logo} />
+      ) : (
+        <img src="./logo.png" alt="alt" className={styles.logo} />
+      )}
       <div className={styles.container}>
         <InfoTransplants />
         <div className={styles.flexWrap}>
           <ButtonsMenu />
           <div>
-            {isLoading ? (
-              <Spin size="large" className={styles.spinner} />
-            ) : filteredTickets?.length === 0 ? (
+            {filteredTickets.length === 0 ? (
               <Alert
                 message={'Рейсов, подходящих под заданные фильтры, не найдено'}
                 style={{ marginTop: 20 }}
