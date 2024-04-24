@@ -18,6 +18,8 @@ const App = (props) => {
   const visibleTickets = useSelector((state) => state.app.visibleTickets)
   const ticketsReady = useSelector((state) => state.app.ticketsReady)
 
+  let isSearchIdFetched = false
+
   useEffect(() => {
     dispatch(updateFilteredTickets(state))
   }, [
@@ -31,8 +33,11 @@ const App = (props) => {
   ])
 
   useEffect(() => {
-    dispatch(fetchSearchId())
-  }, []) 
+    if (!isSearchIdFetched) {
+      dispatch(fetchSearchId())
+      isSearchIdFetched = true
+    }
+  }, [dispatch])
 
   useEffect(() => {
     if (error) {
