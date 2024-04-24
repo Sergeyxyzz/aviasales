@@ -16,7 +16,6 @@ const App = (props) => {
   const isLoading = useSelector((state) => state.app.isLoading)
   const error = useSelector((state) => state.app.error)
   const visibleTickets = useSelector((state) => state.app.visibleTickets)
-  const ticketsReady = useSelector((state) => state.app.ticketsReady)
 
   let isSearchIdFetched = false
 
@@ -71,7 +70,7 @@ const App = (props) => {
             )}
           </div>
           <div className={styles.wrapShowMore}>
-            {filteredTickets?.length === 0 || !ticketsReady ? '' : <BtnShowMoreTickets />}
+            <BtnShowMoreTickets />
           </div>
         </div>
       </div>

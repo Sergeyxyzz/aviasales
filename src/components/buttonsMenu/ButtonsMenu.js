@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { sortTicketsByPrice, sortTicketsByTime } from '../../store/appSlice'
 
-const ButtonsMenu = (props) => {
+const ButtonsMenu = () => {
   const dispatch = useDispatch()
   const [activeButton, setActiveButton] = useState('price')
   const ticketsReady = useSelector((state) => state.app.ticketsReady)
@@ -25,13 +25,12 @@ const ButtonsMenu = (props) => {
         type="button"
         className={activeButton === 'price' ? styles.active : ''}
         onClick={handleSortTicketsByPrice}
-        disabled={!ticketsReady}
       >
         САМЫЙ ДЕШЕВЫЙ
       </button>
       <button
         type="button"
-        className={activeButton === 'time' ? styles.active : ''}
+        className={activeButton === 'time' ? styles.active : styles.disabled}
         onClick={handleSortTicketsByTime}
         disabled={!ticketsReady}
       >

@@ -28,12 +28,10 @@ const appSlice = createSlice({
   name: 'app',
 
   initialState: {
-    tickets: { tickets: [] },
+    tickets: [],
     status: null,
     error: null,
     isLoading: false,
-    searchId: null,
-    searchIdReady: false,
     ticketsReady: false,
     visibleTickets: 5,
     checkedAll: true,
@@ -46,29 +44,18 @@ const appSlice = createSlice({
 
   reducers: {
     addTickets(state, action) {
-      state.tickets.tickets.push(...action.payload)
+      state.tickets.push(...action.payload)
     },
 
     sortTicketsByPrice(state) {
-      state.tickets = {
-        ...state.tickets,
-        tickets: state.tickets.tickets?.sort((a, b) => a.price - b.price),
-      }
+      state.tickets.sort((a, b) => a.price - b.price)
     },
 
     sortTicketsByTime(state) {
-      state.tickets = {
-        ...state.tickets,
-        tickets: state.tickets.tickets
-          ?.map((elem) => {
-            const durationSum = elem.segments[0].duration + elem.segments[1].duration
-            return {
-              ...elem,
-              durationSum: durationSum,
-            }
-          })
-          ?.sort((a, b) => a.durationSum - b.durationSum),
-      }
+      state.tickets.forEach((ticket) => {
+        ticket.durationSum = ticket.segments.reduce((sum, segment) => sum + segment.duration, 0)
+      })
+      state.tickets.sort((a, b) => a.durationSum - b.durationSum)
     },
 
     showMoreTickets(state) {
@@ -125,7 +112,7 @@ const appSlice = createSlice({
     },
 
     updateFilteredTickets(state) {
-      state.filteredTickets = state.tickets.tickets?.filter((ticket) => {
+      state.filteredTickets = state.tickets?.filter((ticket) => {
         if (state.checkedAll) {
           return true
         } else {
@@ -150,7 +137,6 @@ const appSlice = createSlice({
       })
       .addCase(fetchSearchId.fulfilled, (state, action) => {
         state.status = 'resolved'
-        state.searchId = action.payload.searchId
       })
       .addCase(fetchSearchId.rejected, (state) => {
         state.status = 'rejected'
