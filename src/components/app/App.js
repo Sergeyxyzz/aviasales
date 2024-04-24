@@ -46,7 +46,7 @@ const App = (props) => {
   return (
     <>
       {isLoading ? (
-        <Spin size="large" className={styles.logo} />
+        <Spin size="large" className={styles.logoSpinner} />
       ) : (
         <img src="./logo.png" alt="alt" className={styles.logo} />
       )}

@@ -18,7 +18,9 @@ const fetchTickets = createAsyncThunk('app/fetchTickets', async (searchId, { dis
           break
         }
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error('Ошибка загрузки билетов', error)
+    }
   }
 })
 
@@ -142,7 +144,7 @@ const appSlice = createSlice({
 
   extraReducers: (builder) => {
     builder
-      .addCase(fetchSearchId.pending, (state, action) => {
+      .addCase(fetchSearchId.pending, (state) => {
         state.status = 'loading'
         state.error = null
       })
@@ -150,7 +152,7 @@ const appSlice = createSlice({
         state.status = 'resolved'
         state.searchId = action.payload.searchId
       })
-      .addCase(fetchSearchId.rejected, (state, action) => {
+      .addCase(fetchSearchId.rejected, (state) => {
         state.status = 'rejected'
         state.error = 'Ошибка при загрузке идентификатора: перезагрузите страницу или проверьте подключение к интернету'
       })
