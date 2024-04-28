@@ -7,15 +7,17 @@ import BtnShowMoreTickets from '../BtnShowMoreTickets/BtnShowMoreTickets'
 import { v4 as uuidv4 } from 'uuid'
 import { useDispatch, useSelector } from 'react-redux'
 import { Spin, notification, Alert } from 'antd'
-import { fetchSearchId, updateFilteredTickets } from '../../store/appSlice'
+import { fetchSearchId, setVisible } from '../../store/fetchNSortSlice'
+import { setTicketInFilterSlice, updateFilteredTickets } from '../../store/filterSlice'
 
 const App = (props) => {
   const dispatch = useDispatch()
-  const filteredTickets = useSelector((state) => state.app.filteredTickets)
-  const state = useSelector((state) => state.app)
-  const isLoading = useSelector((state) => state.app.isLoading)
-  const error = useSelector((state) => state.app.error)
-  const visibleTickets = useSelector((state) => state.app.visibleTickets)
+  const filteredTickets = useSelector((state) => state.filter.filteredTickets)
+  const state = useSelector((state) => state.filter)
+  const isLoading = useSelector((state) => state.fetch.isLoading)
+  const error = useSelector((state) => state.fetch.error)
+  const visibleTickets = useSelector((state) => state.fetch.visibleTickets)
+  const tickets = useSelector((state) => state.fetch.tickets)
 
   let isSearchIdFetched = false
 
@@ -32,6 +34,20 @@ const App = (props) => {
   ])
 
   useEffect(() => {
+    dispatch(setVisible())
+  }, [
+    state.checkedAll,
+    state.checkedWithout,
+    state.checkedOne,
+    state.checkedTwo,
+    state.checkedThree,
+  ])
+
+  useEffect(() => {
+    dispatch(setTicketInFilterSlice(tickets))
+  }, [tickets, dispatch])
+
+  useEffect(() => {
     if (!isSearchIdFetched) {
       dispatch(fetchSearchId())
       isSearchIdFetched = true
@@ -41,7 +57,7 @@ const App = (props) => {
   useEffect(() => {
     if (error) {
       notification.error({
-        message: 'Ошибка',
+        message: 'Ошибка!',
         description: error,
       })
     }
@@ -52,7 +68,7 @@ const App = (props) => {
       {isLoading ? (
         <Spin size="large" className={styles.logoSpinner} />
       ) : (
-        <img src="./logo.png" alt="alt" className={styles.logo} />
+        <img src="./logo.png" alt="Logo" className={styles.logo} />
       )}
       <div className={styles.container}>
         <InfoTransplants />
@@ -66,11 +82,19 @@ const App = (props) => {
                 showIcon
               />
             ) : (
-              filteredTickets?.slice(0, visibleTickets)?.map((ticket) => <Ticket key={uuidv4()} {...ticket} />)
+              filteredTickets
+                ?.slice(0, visibleTickets)
+                ?.map((ticket) => <Ticket key={uuidv4()} {...ticket} />)
             )}
           </div>
           <div className={styles.wrapShowMore}>
-            <BtnShowMoreTickets />
+            {state.checkedAll ||
+            state.checkedWithout ||
+            state.checkedOne ||
+            state.checkedTwo ||
+            state.checkedThree ? (
+              <BtnShowMoreTickets />
+            ) : null}
           </div>
         </div>
       </div>

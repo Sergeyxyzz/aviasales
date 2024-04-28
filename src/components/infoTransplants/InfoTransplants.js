@@ -1,42 +1,25 @@
 import React from 'react'
 import styles from './styles.module.scss'
 import { useDispatch, useSelector } from 'react-redux'
+
 import {
   switchCheckedAll,
   switchCheckedOne,
   switchCheckedThree,
   switchCheckedTwo,
   switchCheckedWithout,
-} from '../../store/appSlice'
+} from '../../store/filterSlice'
+
+import {
+  selectCheckedAll,
+  selectCheckedWithout,
+  selectCheckedOne,
+  selectCheckedTwo,
+  selectCheckedThree,
+} from '../../store/selectors'
 
 const InfoTransplants = (props) => {
   const dispatch = useDispatch()
-
-  const isCheckedAll = useSelector((state) => state.app.checkedAll)
-  const isCheckedWithout = useSelector((state) => state.app.checkedWithout)
-  const isCheckedOne = useSelector((state) => state.app.checkedOne)
-  const isCheckedTwo = useSelector((state) => state.app.checkedTwo)
-  const isCheckedThree = useSelector((state) => state.app.checkedThree)
-
-  const handleCheckedAll = () => {
-    dispatch(switchCheckedAll())
-  }
-
-  const handleCheckedWithout = () => {
-    dispatch(switchCheckedWithout())
-  }
-
-  const handleCheckedOne = () => {
-    dispatch(switchCheckedOne())
-  }
-
-  const handleCheckedTwo = () => {
-    dispatch(switchCheckedTwo())
-  }
-
-  const handleCheckedThree = () => {
-    dispatch(switchCheckedThree())
-  }
 
   return (
     <div className={styles.infoTransplants}>
@@ -47,7 +30,12 @@ const InfoTransplants = (props) => {
         <ul className={styles.listWrap}>
           <li>
             <label>
-              <input type="checkbox" checked={isCheckedAll} onChange={handleCheckedAll} className={styles.checkbox} />
+              <input
+                type="checkbox"
+                checked={useSelector(selectCheckedAll)}
+                onChange={() => dispatch(switchCheckedAll())}
+                className={styles.checkbox}
+              />
               <span></span>
               <p className={styles.infoCheckboxText}>Все</p>
             </label>
@@ -56,8 +44,8 @@ const InfoTransplants = (props) => {
             <label>
               <input
                 type="checkbox"
-                checked={isCheckedWithout}
-                onChange={handleCheckedWithout}
+                checked={useSelector(selectCheckedWithout)}
+                onChange={() => dispatch(switchCheckedWithout())}
                 className={styles.checkbox}
               />
               <span></span>
@@ -66,14 +54,24 @@ const InfoTransplants = (props) => {
           </li>
           <li>
             <label>
-              <input type="checkbox" checked={isCheckedOne} onChange={handleCheckedOne} className={styles.checkbox} />
+              <input
+                type="checkbox"
+                checked={useSelector(selectCheckedOne)}
+                onChange={() => dispatch(switchCheckedOne())}
+                className={styles.checkbox}
+              />
               <span></span>
               <p className={styles.infoCheckboxText}>1 пересадка</p>
             </label>
           </li>
           <li>
             <label>
-              <input type="checkbox" checked={isCheckedTwo} onChange={handleCheckedTwo} className={styles.checkbox} />
+              <input
+                type="checkbox"
+                checked={useSelector(selectCheckedTwo)}
+                onChange={() => dispatch(switchCheckedTwo())}
+                className={styles.checkbox}
+              />
               <span></span>
               <p className={styles.infoCheckboxText}>2 пересадки</p>
             </label>
@@ -82,8 +80,8 @@ const InfoTransplants = (props) => {
             <label>
               <input
                 type="checkbox"
-                checked={isCheckedThree}
-                onChange={handleCheckedThree}
+                checked={useSelector(selectCheckedThree)}
+                onChange={() => dispatch(switchCheckedThree())}
                 className={styles.checkbox}
               />
               <span></span>

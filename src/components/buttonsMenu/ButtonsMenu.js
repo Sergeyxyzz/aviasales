@@ -2,12 +2,12 @@ import React, { useState } from 'react'
 import styles from './styles.module.scss'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { sortTicketsByPrice, sortTicketsByTime } from '../../store/appSlice'
+import { sortTicketsByPrice, sortTicketsByTime } from '../../store/fetchNSortSlice'
 
 const ButtonsMenu = () => {
   const dispatch = useDispatch()
   const [activeButton, setActiveButton] = useState('price')
-  const ticketsReady = useSelector((state) => state.app.ticketsReady)
+  const ticketsReady = useSelector((state) => state.fetch.ticketsReady)
 
   const handleSortTicketsByPrice = () => {
     setActiveButton('price')
