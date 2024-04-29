@@ -7,7 +7,7 @@ export const fetchSearchId = createAsyncThunk('fetch/fetchSearchId', async (_, {
 })
 
 const fetchTickets = createAsyncThunk('fetch/fetchTickets', async (searchId, { dispatch }) => {
-  let errorCounterFilms = 0
+  let errorCounterTickets = 0
   let errorCounterInternet = 0
 
   while (true) {
@@ -23,8 +23,8 @@ const fetchTickets = createAsyncThunk('fetch/fetchTickets', async (searchId, { d
           break
         }
       } else {
-        errorCounterFilms += 1
-        if (errorCounterFilms === 5) {
+        errorCounterTickets += 1
+        if (errorCounterTickets === 5) {
           const errorMsg = `Ошибка загрузки билетов с сервера: перезагрузите страницу или проверьте подключение к интернету.`
           dispatch(fetchSlice.actions.setError(errorMsg))
           break
