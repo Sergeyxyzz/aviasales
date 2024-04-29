@@ -1,15 +1,13 @@
-import { configureStore, combineReducers } from '@reduxjs/toolkit'
+import { configureStore } from '@reduxjs/toolkit'
 
 import fetchNSortReducer from './fetchNSortSlice'
 import filterReducer from './filterSlice'
 
-const rootReducer = combineReducers({
-  fetch: fetchNSortReducer,
-  filter: filterReducer,
-})
-
 const store = configureStore({
-  reducer: rootReducer,
+  reducer: {
+    fetch: fetchNSortReducer,
+    filter: filterReducer,
+  },
 })
 
 export default store
